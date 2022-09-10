@@ -5,20 +5,27 @@ import { Amount, Container, Footer, Header, Icon, LastTransaction, Title } from 
 interface HightlightCardProps {
     title: string
     amount: string
-    lastTransation: string
+    lastTransaction: string
+    type: 'up' | 'down' | 'total'
 }
 
-export default function HightlightCard({title, lastTransation, amount}: HightlightCardProps){
+const icon = {
+    up: 'arrow-up-circle',
+    down: 'arrow-down-circle',
+    total: 'dollar-sign'
+}
+
+export default function HightlightCard({title, lastTransaction, type, amount}: HightlightCardProps){
     return (
-        <Container>
+        <Container type={type}>
             <Header>
-                <Title>{title}</Title>
-                <Icon name="arrow-up-circle"/>
+                <Title type={type}>{title}</Title>
+                <Icon type={type} name={icon[type]}/>
             </Header>
 
             <Footer>
-                <Amount>{amount}</Amount>
-                <LastTransaction>{lastTransation}</LastTransaction>
+                <Amount type={type}>{amount}</Amount>
+                <LastTransaction type={type}>{lastTransaction}</LastTransaction>
             </Footer>
         </Container>
     );

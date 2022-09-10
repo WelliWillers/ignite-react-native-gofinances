@@ -1,9 +1,13 @@
-import styled from 'styled-components/native'
+import styled, { css } from 'styled-components/native'
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize'
 import { Feather } from '@expo/vector-icons'
 
-export const Container = styled.View`
-    background-color: ${({theme}) => theme.colors.shape};
+interface TypeProps {
+    type: 'up' | 'down' | 'total'
+}
+
+export const Container = styled.View<TypeProps>`
+    background-color: ${({type, theme}) => type === 'total' ? theme.colors.secondary : theme.colors.shape};
     width: ${RFValue(280)}px;
     border-radius: 5px;
     padding: 20px 23px;
@@ -17,30 +21,41 @@ export const Header = styled.View`
     justify-content: space-between;
 `
 
-export const Title = styled.Text`
+export const Title = styled.Text<TypeProps>`
+    color : ${({type, theme}) => type === 'total' ? theme.colors.shape : theme.colors.text_dark};
     font-family: ${({theme}) => theme.fonts.regular};
     font-size: ${RFValue(14)}px;
-    color: ${({theme}) => theme.colors.text_dark};
-    `
+`
 
-export const Icon = styled(Feather)`
+export const Icon = styled(Feather)<TypeProps>`
+    ${({type}) => type === 'up' && css`
+        color: ${({theme}) => theme.colors.success};
+    `}
+
+    ${({type}) => type === 'down' && css`
+        color: ${({theme}) => theme.colors.attention};
+    `}
+
+    ${({type}) => type === 'total' && css`
+        color: ${({theme}) => theme.colors.shape};
+    `}
+
     font-size: ${RFValue(40)}px;
-    color: ${({theme}) => theme.colors.success};
 `
 
 export const Footer = styled.View`
 
 `
 
-export const Amount = styled.Text`
+export const Amount = styled.Text<TypeProps>`
+    color : ${({type, theme}) => type === 'total' ? theme.colors.shape : theme.colors.text_dark};
     font-family: ${({theme}) => theme.fonts.medium};
     font-size: ${RFValue(32)}px;
     margin-top: 38px;
-    color: ${({theme}) => theme.colors.text_dark};
 `
 
-export const LastTransaction = styled.Text`
+export const LastTransaction = styled.Text<TypeProps>`
+    color : ${({type, theme}) => type === 'total' ? theme.colors.shape : theme.colors.text};
     font-family: ${({theme}) => theme.fonts.regular};
     font-size: ${RFValue(12)}px;
-    color: ${({theme}) => theme.colors.text};
 `
