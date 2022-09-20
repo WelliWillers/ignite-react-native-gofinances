@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text } from 'react-native'
-import { Amount, Container, Footer, Header, Icon, LastTransaction, Title } from './styles';
+import * as styles from './styles';
 
 interface HightlightCardProps {
     title: string
@@ -17,16 +17,16 @@ const icon = {
 
 export default function HightlightCard({title, lastTransaction, type, amount}: HightlightCardProps){
     return (
-        <Container type={type}>
-            <Header>
-                <Title type={type}>{title}</Title>
-                <Icon type={type} name={icon[type]}/>
-            </Header>
+        <styles.Container type={type}>
+            <styles.Header>
+                <styles.Title type={type}>{title}</styles.Title>
+                <styles.Icon type={type} name={icon[type]}/>
+            </styles.Header>
 
-            <Footer>
-                <Amount type={type}>{amount}</Amount>
-                <LastTransaction type={type}>{lastTransaction}</LastTransaction>
-            </Footer>
-        </Container>
+            <styles.Footer>
+                <styles.Amount type={type}>{amount}</styles.Amount>
+                <styles.LastTransaction type={type}>{lastTransaction}</styles.LastTransaction>
+            </styles.Footer>
+        </styles.Container>
     );
 }

@@ -3,21 +3,7 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
 import HightlightCard from "../../components/HightlightCard";
 import TransactionCard, { TransactionCardProps } from "../../components/TransactionCard";
 
-import { 
-    Container, 
-    Header, 
-    Icon, 
-    Photo, 
-    User, 
-    UserGreeting, 
-    UserInfo, 
-    UserName, 
-    UserWrapper,
-    HightlightCards,
-    Transactions,
-    Title,
-    TransactionsList
-} from "./styles";
+import * as styles from "./styles";
 
 export interface DataListProps extends TransactionCardProps {
     id: string;
@@ -28,7 +14,7 @@ export default function Dashboard(){
     const data: DataListProps[] = [
         {
             id: '1',
-            title:"Desenvolvimento de site",
+            title:"Desenvolvimento de sistema",
             type:"up",
             category:{icon: 'dollar-sign', name:'Vendas'},
             amount:"R$ 17,00" ,
@@ -53,39 +39,39 @@ export default function Dashboard(){
     ]
 
     return (
-        <Container>
-            <Header>
-                <UserWrapper>
-                    <UserInfo>
-                        <Photo source={{uri: 'https://github.com/WelliWillers.png'}}/>
-                        <User>
-                            <UserGreeting>Olá,</UserGreeting>
-                            <UserName>Wellington</UserName>
-                        </User>
-                    </UserInfo>
+        <styles.Container>
+            <styles.Header>
+                <styles.UserWrapper>
+                    <styles.UserInfo>
+                        <styles.Photo source={{uri: 'https://github.com/WelliWillers.png'}}/>
+                        <styles.User>
+                            <styles.UserGreeting>Olá,</styles.UserGreeting>
+                            <styles.UserName>Wellington</styles.UserName>
+                        </styles.User>
+                    </styles.UserInfo>
 
-                    <Icon name="power" />
-                </UserWrapper>
-            </Header>
+                    <styles.Icon name="power" />
+                </styles.UserWrapper>
+            </styles.Header>
 
-            <HightlightCards>
+            <styles.HightlightCards>
                 <HightlightCard type="up" title="Entradas" amount="R$ 17.400,00" lastTransaction="Última entrada dia 13 de abril" />
                 <HightlightCard type="down" title="Saídas" amount="R$ 17.400,00" lastTransaction="Última saídas dia 15 de abril" />
                 <HightlightCard type="total" title="Total" amount="R$ 17.400,00" lastTransaction="Total geral de movimentações" />
-            </HightlightCards>
+            </styles.HightlightCards>
 
-            <Transactions>
-                <Title>
+            <styles.Transactions>
+                <styles.Title>
                     Listagem
-                </Title>
+                </styles.Title>
 
-                <TransactionsList
+                <styles.TransactionsList
                     data={data}
                     keyExtractor={item  => item.id.toString()}
                     renderItem={({ item }) => <TransactionCard  data={item} /> }
                 />
 
-            </Transactions>
-        </Container>
+            </styles.Transactions>
+        </styles.Container>
     )
 }

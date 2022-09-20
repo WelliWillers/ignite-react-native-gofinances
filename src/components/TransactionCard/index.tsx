@@ -1,5 +1,5 @@
 import React from 'react'
-import { Amount, Category, CategoryName, Container, DateTransaction, Footer, Icon, Title } from './styles'
+import * as styles from './styles'
 
 type CategoryProps = {
     name: string
@@ -20,18 +20,18 @@ type Props = {
 
 export default function TransactionCard({data}:Props){
     return (
-        <Container>
-            <Title>{data.title}</Title>
-            <Amount type={data.type}>{data.type === 'down' && '-'} {data.amount}</Amount>
-            <Footer>
-                <Category >
-                    <Icon name={data.category.icon}/>
-                    <CategoryName>
+        <styles.Container>
+            <styles.Title>{data.title}</styles.Title>
+            <styles.Amount type={data.type}>{data.type === 'down' && '-'} {data.amount}</styles.Amount>
+            <styles.Footer>
+                <styles.Category >
+                    <styles.Icon name={data.category.icon}/>
+                    <styles.CategoryName>
                         {data.category.name}
-                    </CategoryName>
-                </Category>
-                <DateTransaction>{data.date}</DateTransaction>
-            </Footer>
-        </Container>
+                    </styles.CategoryName>
+                </styles.Category>
+                <styles.DateTransaction>{data.date}</styles.DateTransaction>
+            </styles.Footer>
+        </styles.Container>
     );
 }
