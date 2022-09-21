@@ -1,18 +1,29 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { View, Modal } from 'react-native';
+import { Buttom } from '../../components/Buttom';
 import { BaseInput } from '../../components/Form/BaseInput';
-import { Buttom } from '../../components/Form/Buttom';
-import { SelectCategory } from '../../components/Form/SelectCategory';
+import { SelectCategoryButton } from '../../components/Form/SelectCategoryButton';
 import { TransactionTypeButton } from '../../components/Form/TransactionTypeButton';
+import { CategorySelect } from '../CategorySelect';
 
 import * as styles from './styles'
 
 export function Register() {
 
+    const [category, setCategory] = useState({
+        key: 'category',
+        name: 'categoria',
+        icon: 'any'
+    })
     const [selectedType, setSelectedType] = useState('')
+    const [modalOpen, setModelOpen] = useState(false)
 
     function handleToggleSelectedType(type: string){
         setSelectedType(type)
+    }
+
+    function handleToggleModal(){
+        setModelOpen(!modalOpen)
     }
 
     return (
@@ -31,11 +42,19 @@ export function Register() {
                         <TransactionTypeButton selected={selectedType === 'down' } onPress={() => handleToggleSelectedType('down')} title="Saída" type="down"/>
                     </styles.TransationTypes>
 
-                    <SelectCategory title="Categoria"/>
+                    <SelectCategoryButton onPress={handleToggleModal} title={category.name} />
                 </styles.Fields>
 
                 <Buttom title="Enviar" />
             </styles.Form>
+
+            <Modal visible={modalOpen}>
+                <CategorySelect
+                    category={category}
+                    setCategory={setCategory}
+                    closeSelectCategory={handleToggleModal}
+                />
+            </Modal>
         </styles.Container>
     );
 }
