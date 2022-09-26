@@ -1,7 +1,8 @@
-import { FlatList, ScrollView } from "react-native";
-import { getBottomSpace } from "react-native-iphone-x-helper";
+import { useEffect, useState } from "react";
+import { Text } from "react-native";
 import HightlightCard from "../../components/HightlightCard";
 import TransactionCard, { TransactionCardProps } from "../../components/TransactionCard";
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import * as styles from "./styles";
 
@@ -11,32 +12,46 @@ export interface DataListProps extends TransactionCardProps {
 
 export default function Dashboard(){
 
-    const data: DataListProps[] = [
-        {
-            id: '1',
-            title:"Desenvolvimento de sistema",
-            type:"up",
-            category:{icon: 'dollar-sign', name:'Vendas'},
-            amount:"R$ 17,00" ,
-            date:"13/12/2022" 
-        },
-        {
-            id: '2',
-            title:"Desenvolvimento de site",
-            type:"down",
-            category:{icon: 'coffee', name:'Vendas'},
-            amount:"R$ 17,00" ,
-            date:"13/12/2022" 
-        },
-        {
-            id: '3',
-            title:"Desenvolvimento de sitsssssssadsdasdssssse",
-            type:"up",
-            category:{icon: 'dollar-sign', name:'Vendas'},
-            amount:"R$ 17,00" ,
-            date:"13/12/2022" 
-        }
-    ]
+    const [transations, setTransations] = useState<DataListProps[]>([])
+
+    function handleLogout () {
+        console.log('logout')
+    }
+
+    async function loadTransations(){
+        const dataKey = '@goFinances:transations'
+        const response = await AsyncStorage.getItem(dataKey)
+        const transationsFound = response ? JSON.parse(response) : []
+
+        const transactionsFormated: DataListProps[] = transationsFound
+        .map((item: DataListProps) => {
+            const amount = Number(item.amount).toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            })
+
+            const date = Intl.DateTimeFormat('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: '2-digit'
+            }).format(new Date(item.date))
+
+            return {
+                id: item.id,
+                name: item.name,
+                category: item.category,
+                type: item.type,
+                amount,
+                date
+            }
+        })
+
+        setTransations(transactionsFormated)
+    } 
+
+    useEffect(() => {
+        loadTransations()
+    }, [])
 
     return (
         <styles.Container>
@@ -50,7 +65,10 @@ export default function Dashboard(){
                         </styles.User>
                     </styles.UserInfo>
 
-                    <styles.Icon name="power" />
+                    <styles.Logout onPress={handleLogout}>
+                        <styles.Icon name="power" />
+                    </styles.Logout>
+
                 </styles.UserWrapper>
             </styles.Header>
 
@@ -61,15 +79,27 @@ export default function Dashboard(){
             </styles.HightlightCards>
 
             <styles.Transactions>
-                <styles.Title>
-                    Listagem
-                </styles.Title>
+                <styles.TitleReload>
+                    <styles.Title>
+                        Listagem
+                    </styles.Title>
+                    
+                    <styles.Reload onPress={loadTransations}>
+                        <styles.Icon name="refresh-cw" />
+                    </styles.Reload>
+                </styles.TitleReload>
 
-                <styles.TransactionsList
-                    data={data}
-                    keyExtractor={item  => item.id.toString()}
-                    renderItem={({ item }) => <TransactionCard  data={item} /> }
-                />
+                {
+                    transations.length > 0 ? (
+                        <styles.TransactionsList
+                            data={transations}
+                            keyExtractor={item  => item.id.toString()}
+                            renderItem={({ item }) => <TransactionCard  data={item} /> }
+                        />
+                    ) : (
+                        <Text>Nenhuma transação cadastrada</Text>
+                    )
+                }
 
             </styles.Transactions>
         </styles.Container>

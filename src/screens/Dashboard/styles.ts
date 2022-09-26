@@ -1,8 +1,9 @@
-import styled from 'styled-components/native';
-import { RFPercentage, RFValue } from 'react-native-responsive-fontsize'
-import { Feather } from '@expo/vector-icons'
 import { getBottomSpace, getStatusBarHeight } from 'react-native-iphone-x-helper'
-import { FlatList, FlatListProps } from 'react-native';
+import { RFPercentage, RFValue } from 'react-native-responsive-fontsize'
+import { BorderlessButton, RectButton } from 'react-native-gesture-handler';
+import { FlatList, FlatListProps, TouchableOpacity } from 'react-native';
+import styled from 'styled-components/native';
+import { Feather } from '@expo/vector-icons'
 import { DataListProps } from '.'
 
 
@@ -54,6 +55,12 @@ export const UserName = styled.Text`
   font-family: ${({theme}) => theme.fonts.bold};
 `
 
+export const Logout = styled(RectButton)`
+  font-size: ${RFValue(18)}px;  
+  font-family: ${({theme}) => theme.fonts.regular};
+  margin-bottom: 16px;
+`
+
 export const Icon = styled(Feather)`
   color: ${({theme}) => theme.colors.secondary};
   font-size: ${RFValue(24)}px;
@@ -74,6 +81,18 @@ export const Transactions = styled.View`
   padding: 0 24px;
 
   margin-top: ${RFPercentage(12)}px;
+`
+
+export const TitleReload = styled.View`
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+`
+
+export const Reload =  styled.TouchableOpacity`
+  font-size: ${RFValue(18)}px;  
+  font-family: ${({theme}) => theme.fonts.regular};
+  margin-bottom: 16px;
 `
 
 export const Title = styled.Text`

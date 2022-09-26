@@ -1,9 +1,10 @@
+import 'react-native-gesture-handler';
+import 'intl'
+import 'intl/locale-data/jsonp/pt-BR';
 import React from 'react'
 import { ThemeProvider } from 'styled-components'
 import theme from './src/global/styles/theme'
 import * as SplashScreen from 'expo-splash-screen' 
-
-import { Register } from './src/screens/Register'
 
 import {
   useFonts,
@@ -11,6 +12,8 @@ import {
   Poppins_500Medium,
   Poppins_700Bold
 } from '@expo-google-fonts/poppins'
+import { AppRoutes } from './src/routes/app.routes'
+import { NavigationContainer } from '@react-navigation/native'
 
 export default function App() {
   SplashScreen.preventAutoHideAsync()
@@ -29,7 +32,9 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Register />
+      <NavigationContainer >
+        <AppRoutes />
+      </NavigationContainer>
     </ThemeProvider>
   );
 }

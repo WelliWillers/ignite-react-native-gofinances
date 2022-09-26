@@ -7,7 +7,7 @@ type CategoryProps = {
 }
 
 export interface TransactionCardProps {
-    title: string
+    name: string
     amount: string
     category: CategoryProps    
     type: 'up' | 'down'
@@ -21,7 +21,7 @@ type Props = {
 export default function TransactionCard({data}:Props){
     return (
         <styles.Container>
-            <styles.Title>{data.title}</styles.Title>
+            <styles.Title>{data.name}</styles.Title>
             <styles.Amount type={data.type}>{data.type === 'down' && '-'} {data.amount}</styles.Amount>
             <styles.Footer>
                 <styles.Category >
