@@ -12,6 +12,13 @@ export const Container = styled.View`
   background-color: ${({theme}) => theme.colors.background};
 `
 
+export const Loading = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({theme}) => theme.colors.primary};
+`
+
 export const Header = styled.View`
   background-color: ${({theme}) => theme.colors.primary};
   height: ${RFPercentage(42)}px;

@@ -24,7 +24,7 @@ export default function HightlightCard({title, lastTransaction, type, amount}: H
             </styles.Header>
 
             <styles.Footer>
-                <styles.Amount type={type}>{amount}</styles.Amount>
+                <styles.Amount type={type}>{amount ? amount : 'R$ 0,00'}</styles.Amount>
                 <styles.LastTransaction type={type}>{lastTransaction}</styles.LastTransaction>
             </styles.Footer>
         </styles.Container>
