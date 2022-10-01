@@ -2,14 +2,14 @@ import React from 'react';
 import * as Styles from './styles';
 
 interface Props {
-    title: string;
-    color: string;
-    amount: string;
+  title: string;
+  color: string;
+  amount: string;
 }
 
-export function HistoryCard( {title, color, amount}: Props) {
+export function HistoryCard( {title, color, amount, ...rest}: Props) {
   return (
-    <Styles.Container color={color}>
+    <Styles.Container color={color} {...rest}>
         <Styles.Title>
             {title}
         </Styles.Title>
