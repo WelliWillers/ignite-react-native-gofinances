@@ -139,7 +139,7 @@ export function Resume() {
                                             x="percent"
                                             y="total"
                                             colorScale={totalByCategories.map(category => category.color)}
-                                            key="id"
+                                            eventKey="id"
                                             style={{
                                                 labels: {
                                                     fontSize: RFValue(18),

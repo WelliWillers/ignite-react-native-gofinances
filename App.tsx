@@ -15,6 +15,9 @@ import {
 import { AppRoutes } from './src/routes/app.routes'
 import { NavigationContainer } from '@react-navigation/native'
 import { StatusBar } from 'react-native';
+import { Login } from './src/screens/Login';
+import { AuthProvider } from './src/contexts/AuthContext';
+import { Routes } from './src/routes';
 
 export default function App() {
   SplashScreen.preventAutoHideAsync()
@@ -33,10 +36,10 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <NavigationContainer >
-        <StatusBar barStyle='light-content' translucent animated />
-        <AppRoutes />
-      </NavigationContainer>
+      <StatusBar barStyle='light-content' translucent animated />
+      <AuthProvider>
+        <Routes />
+      </AuthProvider>
     </ThemeProvider>
   );
 }
