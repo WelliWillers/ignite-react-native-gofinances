@@ -11,6 +11,7 @@ import theme from "../../global/styles/theme";
 import { addMonths, format, subMonths } from "date-fns";
 import { ptBR } from 'date-fns/locale'
 import { useFocusEffect } from "@react-navigation/native";
+import { useAuth } from "../../hooks/useAuth";
 
 interface TransationData {
     name: string
@@ -41,10 +42,11 @@ export function Resume() {
             setSelectedDate(subMonths(selectedDate, 1))
         }
     }
+    const { user } = useAuth()
 
     async function LoadData(){
         setIsLoading(true)
-        const dataKey = '@goFinances:transations'
+        const dataKey = `@goFinances:transations_user:${user.id}`
         const response = await AsyncStorage.getItem(dataKey)
         const responseFound = response ? JSON.parse(response) : []
 

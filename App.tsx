@@ -18,17 +18,18 @@ import { StatusBar } from 'react-native';
 import { Login } from './src/screens/Login';
 import { AuthProvider } from './src/contexts/AuthContext';
 import { Routes } from './src/routes';
+import { useAuth } from './src/hooks/useAuth';
 
 export default function App() {
   SplashScreen.preventAutoHideAsync()
-
   const [ fontsLoaded ] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
     Poppins_700Bold
   })
+  const { isLoading } = useAuth()
 
-  if(!fontsLoaded){
+  if(!fontsLoaded || isLoading){
     return null
   }
 

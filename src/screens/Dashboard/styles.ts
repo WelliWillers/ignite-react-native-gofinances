@@ -62,7 +62,7 @@ export const UserName = styled.Text`
   font-family: ${({theme}) => theme.fonts.bold};
 `
 
-export const Logout = styled(RectButton)`
+export const Logout = styled.TouchableOpacity`
   font-size: ${RFValue(18)}px;  
   font-family: ${({theme}) => theme.fonts.regular};
   margin-bottom: 16px;

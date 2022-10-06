@@ -12,6 +12,7 @@ import * as styles from './styles'
 import { yupResolver } from '@hookform/resolvers/yup';
 import uuid from 'react-native-uuid';
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../../hooks/useAuth';
 
 interface FormDataProps {
     name: string;
@@ -32,6 +33,7 @@ export function Register() {
         name: 'categoria',
         icon: 'any'
     })
+    const { user } = useAuth()
 
     const { control, reset, handleSubmit, formState: { errors, isSubmitting } } = useForm({
         resolver: yupResolver(formValidation)
@@ -39,7 +41,7 @@ export function Register() {
 
     const navigation = useNavigation()
 
-    const dataKey = '@goFinances:transations'
+    const dataKey = `@goFinances:transations_user:${user.id}`
 
     function handleToggleSelectedType(type: string){
         setSelectedType(type)

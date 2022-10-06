@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import * as AuthSession from 'expo-auth-session'
 import * as AppleAuthentication from 'expo-apple-authentication';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -10,7 +10,9 @@ interface Props {
 interface AuthContextData {
     signInWithGoggle(): Promise<void>
     signInWithApple(): Promise<void>
+    signOut(): Promise<void>
     user: UserProps
+    isLoading: boolean
 }
 
 interface UserProps {
@@ -32,6 +34,28 @@ export const AuthContext = createContext({} as AuthContextData)
 export function AuthProvider({children}: Props){
 
     const [ user, setUser ] = useState({} as UserProps)
+    const [ isLoading, setIsLoading ] = useState(true)
+    const userStorageKey = '@goFinances:user'
+
+    useEffect(() => {
+        async function LoudUserStoregeData() {
+            const data = await AsyncStorage.getItem(userStorageKey)
+
+            if(data){
+                const userLogged = JSON.parse(data)
+                setUser(userLogged)
+            }
+            setIsLoading(false)
+        }
+
+        LoudUserStoregeData()
+
+    }, [])
+
+    async function signOut(){
+        setUser({} as UserProps)
+        await AsyncStorage.removeItem(userStorageKey)
+    }
 
     async function signInWithGoggle(){
         try {
@@ -52,7 +76,7 @@ export function AuthProvider({children}: Props){
                 }
 
                 setUser(userLogged)
-                await AsyncStorage.setItem('@goFinances:user', JSON.stringify(userLogged))
+                await AsyncStorage.setItem(userStorageKey, JSON.stringify(userLogged))
             }
         } catch (err: any) {
             throw new Error(err)
@@ -73,10 +97,10 @@ export function AuthProvider({children}: Props){
                     id: credential.user,
                     name: credential.fullName!.givenName!,
                     email: credential.email!,
-                    photo: undefined
+                    photo: `https://ui.avatars.com/api/?name=${credential.fullName!.givenName!}&length=1`
                 }
                 setUser(userLogged)
-                await AsyncStorage.setItem('@goFinances:user', JSON.stringify(userLogged))
+                await AsyncStorage.setItem(userStorageKey, JSON.stringify(userLogged))
             }
         } catch (error:any) {
             throw new Error(error)
@@ -84,7 +108,7 @@ export function AuthProvider({children}: Props){
     }
 
     return (
-        <AuthContext.Provider value={{ signInWithApple, signInWithGoggle, user }}>
+        <AuthContext.Provider value={{ signInWithApple, signInWithGoggle, signOut, user, isLoading }}>
             {children}
         </AuthContext.Provider>
     )

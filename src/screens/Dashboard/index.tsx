@@ -7,6 +7,7 @@ import { ActivityIndicator } from 'react-native'
 import * as styles from "./styles";
 import { useFocusEffect } from "@react-navigation/native";
 import theme from "../../global/styles/theme";
+import { useAuth } from "../../hooks/useAuth";
 
 export interface DataListProps extends TransactionCardProps {
     id: string;
@@ -28,13 +29,15 @@ export default function Dashboard(){
     const [isLoading, setIsLoading] = useState(true)
     const [transations, setTransations] = useState<DataListProps[]>([])
     const [hightlightData, setHightlightData] = useState<HightlightDataProps>({} as HightlightDataProps)
+    const { signOut, user } = useAuth()
 
-    function handleLogout () {
-        console.log('logout')
+    function handleLogout() {
+        console.log('sair')
+        signOut()
     }
 
     async function loadTransations(){
-        const dataKey = '@goFinances:transations'
+        const dataKey = `@goFinances:transations_user:${user.id}`
         const response = await AsyncStorage.getItem(dataKey)
         const transationsFound = response ? JSON.parse(response) : []
 
@@ -75,7 +78,7 @@ export default function Dashboard(){
 
         const lastEntriesTransationDate  = getTheLastTransationData(transationsFound, 'up')
         const lastExpensivesTransationDate  = getTheLastTransationData(transationsFound, 'down')
-        const totalInterval = `01 à ${lastExpensivesTransationDate}`
+        const totalInterval = lastExpensivesTransationDate === 0 ? 'Não há transações' : `01 à ${lastExpensivesTransationDate}`
 
         setHightlightData({
             entries: {
@@ -107,9 +110,11 @@ export default function Dashboard(){
     }
 
     function getTheLastTransationData(collectionTransationsFound: DataListProps[], type: 'up' | 'down'){
-        
-        const lastTransation = new Date( Math.max.apply( Math ,collectionTransationsFound
-            .filter((item) => item.type === type)
+        const filterCollection = collectionTransationsFound.filter((item) => item.type === type)
+
+        if(filterCollection.length === 0) return 0
+
+        const lastTransation = new Date( Math.max.apply( Math , filterCollection
             .map((item) => new Date(item.date).getTime())
         ))
 
@@ -142,10 +147,10 @@ export default function Dashboard(){
                         <styles.Header>
                             <styles.UserWrapper>
                                 <styles.UserInfo>
-                                    <styles.Photo source={{uri: 'https://github.com/WelliWillers.png'}}/>
+                                    <styles.Photo source={{uri: user.photo}}/>
                                     <styles.User>
                                         <styles.UserGreeting>Olá,</styles.UserGreeting>
-                                        <styles.UserName>Wellington</styles.UserName>
+                                        <styles.UserName>{user.name}</styles.UserName>
                                     </styles.User>
                                 </styles.UserInfo>
 
@@ -157,8 +162,8 @@ export default function Dashboard(){
                         </styles.Header>
 
                         <styles.HightlightCards>
-                            <HightlightCard type="up" title="Entradas" amount={hightlightData.entries.amount} lastTransaction={`Última entrada dia ${hightlightData.entries.lastTransation}`} />
-                            <HightlightCard type="down" title="Saídas" amount={hightlightData.expensives.amount} lastTransaction={`Última saídas dia ${hightlightData.expensives.lastTransation}`} />
+                            <HightlightCard type="up" title="Entradas" amount={hightlightData.entries.amount} lastTransaction={hightlightData.entries.lastTransation.length === 0 ? 'Não há transações' : `Última entrada dia ${hightlightData.entries.lastTransation}`} />
+                            <HightlightCard type="down" title="Saídas" amount={hightlightData.expensives.amount} lastTransaction={hightlightData.expensives.lastTransation.length === 0 ? 'Não há transações' : `Última saídas dia ${hightlightData.expensives.lastTransation}`} />
                             <HightlightCard type="total" title="Total" amount={hightlightData.total.amount} lastTransaction={`${hightlightData.total.lastTransation}`} />
                         </styles.HightlightCards>
 
